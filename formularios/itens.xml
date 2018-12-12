@@ -1,0 +1,7 @@
+<data>  
+    <formulario controller="Nome da classe controladora">
+        <inputText label="Digite seu nome" />
+        <inputText label="Digite seu telefone" />
+        <inputPassword label="Sua senha" />
+    </formulario>
+</data>  

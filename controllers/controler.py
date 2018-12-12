@@ -1,6 +1,7 @@
 from flask import json, jsonify, request
 from functools import wraps
 from configuracao import app
+from teste import obter_objeto_formulario
 
 def requer_autenticacao(f):
     @wraps(f)
@@ -48,6 +49,12 @@ class Teste:
     def soma(self):
         pass
 
+
+@app.route("/obter_formulario", methods=["GET"])
+def obter_formulario():
+
+    valor = obter_objeto_formulario()
+    return json.dumps(valor)
 
 @app.route("/", methods=["POST"])
 @convert_input_to(Teste)
