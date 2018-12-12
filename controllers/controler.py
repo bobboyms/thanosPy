@@ -2,6 +2,8 @@ from flask import json, jsonify, request
 from functools import wraps
 from configuracao import app
 from teste import obter_objeto_formulario
+from flask_cors import CORS, cross_origin
+from forms.TesteForm import TesteForm 
 
 def requer_autenticacao(f):
     @wraps(f)
@@ -49,13 +51,47 @@ class Teste:
     def soma(self):
         pass
 
-
+"""
+"""
 @app.route("/obter_formulario", methods=["GET"])
 def obter_formulario():
 
     valor = obter_objeto_formulario()
     return json.dumps(valor)
 
+@app.route("/enviar_formulario", methods=["POST"])
+def submebter_formulario():
+
+    dataForm = request.get_json()
+    dicionario = dict()
+
+    print("###################")
+
+    #pega os valores recebidos da view
+    for comp in dataForm["formulario"]:
+        dicionario[comp["property"]] = comp["valor"]
+
+    print(dicionario)
+
+    ## aqui cria o objeto
+    ## OBS: criar o objeto se ele não existir na memoria
+    form = TesteForm(**dicionario)
+    func = getattr(form, "eventoSoma")
+
+    #executa a função evento
+    func()
+    print(form.resultado)
+
+    #atualiza a view
+    for comp in dataForm["formulario"]:
+        comp["valor"] = form.__dict__[comp["property"]]
+
+    print("XXXXXXXXXXXXXXXXXXX")
+    print(dataForm)
+    return json.dumps(dataForm)
+
+"""
+"""
 @app.route("/", methods=["POST"])
 @convert_input_to(Teste)
 def hello(pessoa = None):

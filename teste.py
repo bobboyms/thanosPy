@@ -10,6 +10,25 @@ def obter_item_tratado(iten, att):
     else:
         return iten.get(att)
 
+"""
+Função que cria um identificador unico
+"""
+def obter_id_unico(iten):
+    if obter_item_tratado(iten,"id") == "":
+        return str(uuid.uuid4())
+    else:
+        return obter_item_tratado(iten,"id")
+
+"""
+"""
+def obter_option_do_iten(iten):
+    opts = []
+    for options in iten:
+        for option in options:
+            valor = {"valor":obter_item_tratado(option,"valor"), "id":obter_id_unico(option)}
+            opts.append(valor)
+
+    return opts
 
 """
 FUNÇÃO: Le um arquivo XML que representa um formulario
@@ -24,22 +43,27 @@ def obter_objeto_formulario():
     form = {"formulario":formulario}
 
     for elementos in root:
-
         for iten in elementos:
-
-            if obter_item_tratado(iten,"id") == "":
-                id = str(uuid.uuid4())
-            else:
-                id = obter_item_tratado(iten,"id")
-
+            component = None
             if iten.tag == "inputText":
-                component = {"tipo":"text", "id":id, "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label")}
+                component = {"tipo":"text", "id":obter_id_unico(iten), "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label"), "property":obter_item_tratado(iten,"property")}
             elif iten.tag == "inputPassword":
-                component = {"tipo":"password", "id":id, "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label")}
+                component = {"tipo":"password", "id":obter_id_unico(iten), "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label")}
+            elif iten.tag == "select":
+                opts = obter_option_do_iten(iten)
+                component = {"tipo":"select","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "index":"", "idDetail":"", "valor":"", "options":opts}
+            elif iten.tag == "radio": 
+                opts = obter_option_do_iten(iten)
+                component = {"tipo":"radio","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "index":"", "idDetail":"", "valor":"", "options":opts}
+            elif iten.tag == "checkbox":    
+                opts = obter_option_do_iten(iten)
+                component = {"tipo":"checkbox","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "valores":[], "options":opts}    
 
-            ##adiciona o componente no formulario
-            formulario.append(component)
+            print(iten.tag)
 
+            if component != None:
+                ##adiciona o componente no formulario
+                formulario.append(component)
 
     return form
 
