@@ -46,7 +46,14 @@ def obter_objeto_formulario():
         for iten in elementos:
             component = None
             if iten.tag == "inputText":
-                component = {"tipo":"text", "id":obter_id_unico(iten), "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label"), "property":obter_item_tratado(iten,"property")}
+                component = {
+                                "tipo":"text", "id":obter_id_unico(iten), 
+                                "valor":obter_item_tratado(iten,"value"), 
+                                "placeholder":obter_item_tratado(iten,"placeholder"), 
+                                "label": obter_item_tratado(iten,"label"), 
+                                "property":obter_item_tratado(iten,"property"),
+                                "type":obter_item_tratado(iten,"type")
+                            }
             elif iten.tag == "inputPassword":
                 component = {"tipo":"password", "id":obter_id_unico(iten), "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label")}
             elif iten.tag == "select":
@@ -58,6 +65,8 @@ def obter_objeto_formulario():
             elif iten.tag == "checkbox":    
                 opts = obter_option_do_iten(iten)
                 component = {"tipo":"checkbox","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "valores":[], "options":opts}    
+            elif iten.tag == "button":
+                component = {"tipo":"button", "id":obter_id_unico(iten), "evento":obter_item_tratado(iten,"event"), "label": obter_item_tratado(iten,"label")}
 
             print(iten.tag)
 
@@ -65,6 +74,7 @@ def obter_objeto_formulario():
                 ##adiciona o componente no formulario
                 formulario.append(component)
 
+    formulario.append({"tipo":"evento", "nome":""})
     return form
 
 print(obter_objeto_formulario())
