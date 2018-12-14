@@ -50,53 +50,7 @@ class Teste:
 
     def soma(self):
         pass
-
-"""
-"""
-@app.route("/obter_formulario", methods=["GET"])
-def obter_formulario():
-
-    valor = obter_objeto_formulario()
-    return json.dumps(valor)
-
-"""
-"""
-@app.route("/enviar_formulario", methods=["POST"])
-def submebter_formulario():
-
-    dataForm = request.get_json()
-    dicionario = dict()
-
-    print("###################")
-
-    #pega os valores recebidos da view
-    for comp in dataForm["formulario"]:
-        if comp["tipo"] == "text":
-            if comp["type"] == "float":
-                dicionario[comp["property"]] = float(comp["valor"])
-
-    print(dicionario)
-
-    ## aqui cria o objeto
-    ## OBS: criar o objeto se ele não existir na memoria
-    form = TesteForm(**dicionario)
-
-    #executa o evento no servidor
-    for comp in  dataForm["formulario"]:
-       if comp["tipo"] == "evento":
-           if comp["nome"] != "":
-               func = getattr(form,comp["nome"])
-               func()
-
-    #atualiza a view
-    for comp in dataForm["formulario"]:
-       if comp["tipo"] == "text":
-           comp["valor"] = form.__dict__[comp["property"]]
-
-    print(dataForm)
-    return json.dumps(dataForm)
-
-
+        
 """
 """
 @app.route("/", methods=["POST"])

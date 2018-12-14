@@ -55,18 +55,51 @@ def obter_objeto_formulario():
                                 "type":obter_item_tratado(iten,"type")
                             }
             elif iten.tag == "inputPassword":
-                component = {"tipo":"password", "id":obter_id_unico(iten), "valor":obter_item_tratado(iten,"value"), "placeholder":obter_item_tratado(iten,"placeholder"), "label": obter_item_tratado(iten,"label")}
+                component = {
+                                "tipo":"password", 
+                                "id":obter_id_unico(iten), 
+                                "valor":obter_item_tratado(iten,"value"), 
+                                "placeholder":obter_item_tratado(iten,"placeholder"), 
+                                "label": obter_item_tratado(iten,"label")
+                            }
             elif iten.tag == "select":
                 opts = obter_option_do_iten(iten)
-                component = {"tipo":"select","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "index":"", "idDetail":"", "valor":"", "options":opts}
+                component = {
+                                "tipo":"select",
+                                "id":obter_id_unico(iten), 
+                                "label":obter_item_tratado(iten,"label"), 
+                                "index":"", 
+                                "idDetail":"", 
+                                "valor":"", 
+                                "options":opts
+                            }
             elif iten.tag == "radio": 
                 opts = obter_option_do_iten(iten)
-                component = {"tipo":"radio","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "index":"", "idDetail":"", "valor":"", "options":opts}
+                component = {
+                                "tipo":"radio",
+                                "id":obter_id_unico(iten), 
+                                "label":obter_item_tratado(iten,"label"), 
+                                "index":"", 
+                                "idDetail":"", 
+                                "valor":"", 
+                                "options":opts
+                            }
             elif iten.tag == "checkbox":    
                 opts = obter_option_do_iten(iten)
-                component = {"tipo":"checkbox","id":obter_id_unico(iten), "label":obter_item_tratado(iten,"label"), "valores":[], "options":opts}    
+                component = {
+                                "tipo":"checkbox",
+                                "id":obter_id_unico(iten), 
+                                "label":obter_item_tratado(iten,"label"), 
+                                "valores":[], 
+                                "options":opts
+                            }    
             elif iten.tag == "button":
-                component = {"tipo":"button", "id":obter_id_unico(iten), "evento":obter_item_tratado(iten,"event"), "label": obter_item_tratado(iten,"label")}
+                component = {
+                                "tipo":"button", 
+                                "id":obter_id_unico(iten), 
+                                "evento":obter_item_tratado(iten,"event"), 
+                                "label": obter_item_tratado(iten,"label")
+                            }
 
             if component != None:
                 ##adiciona o componente no formulario

@@ -1,5 +1,4 @@
 class TesteForm:
-
     def __init__(self, valor_a, valor_b, resultado):
         self.valor_a = valor_a
         self.valor_b = valor_b
@@ -10,3 +9,6 @@ class TesteForm:
     """
     def eventoSoma(self):
         self.resultado = self.valor_a + self.valor_b
+    
+    def eventoSubtrai(self):
+        self.resultado = self.valor_a - self.valor_b
