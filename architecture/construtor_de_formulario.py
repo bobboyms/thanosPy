@@ -68,8 +68,6 @@ def obter_objeto_formulario():
             elif iten.tag == "button":
                 component = {"tipo":"button", "id":obter_id_unico(iten), "evento":obter_item_tratado(iten,"event"), "label": obter_item_tratado(iten,"label")}
 
-            print(iten.tag)
-
             if component != None:
                 ##adiciona o componente no formulario
                 formulario.append(component)
