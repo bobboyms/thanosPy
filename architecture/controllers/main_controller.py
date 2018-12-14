@@ -16,6 +16,9 @@ def obter_formulario():
 
 """
 """
+
+lista_formularios = []
+
 @app.route("/main/enviar_formulario", methods=["POST"])
 def submebter_formulario():
 
@@ -33,8 +36,16 @@ def submebter_formulario():
 
     ## aqui cria o objeto
     ## OBS: criar o objeto se ele não existir na memoria
-    Class_ = find_widget("TesteForm")
+
+    nome_formulario = "TesteForm"
+
+    Class_ = find_widget(nome_formulario)
     form = Class_(**dicionario)
+
+    lista.append(Class_)
+
+    for cl in lista:
+        print(cl)
 
     #executa o evento no servidor
     for comp in  dataForm["formulario"]:
