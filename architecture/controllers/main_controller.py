@@ -42,9 +42,9 @@ def submebter_formulario():
     Class_ = find_widget(nome_formulario)
     form = Class_(**dicionario)
 
-    lista.append(Class_)
+    lista_formularios.append(Class_)
 
-    for cl in lista:
+    for cl in lista_formularios:
         print(cl)
 
     #executa o evento no servidor
