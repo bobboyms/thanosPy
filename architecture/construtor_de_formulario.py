@@ -13,8 +13,8 @@ def obter_item_tratado(iten, att):
 """
 Função que cria um identificador unico
 """
-def obter_id_unico(iten):
-    if obter_item_tratado(iten,"id") == "":
+def obter_id_unico(iten = None):
+    if iten == None or obter_item_tratado(iten,"id") == "":
         return str(uuid.uuid4())
     else:
         return obter_item_tratado(iten,"id")
@@ -39,7 +39,15 @@ def obter_objeto_formulario():
     tree = ET.parse('formularios/itens.xml')  
     root = tree.getroot()
 
-    formulario = []
+    componentes = []
+    
+    formulario = {
+        "name_form":"TesteForm",
+        "id_formulario":obter_id_unico(),
+        "evento_atual":"",
+        "componentes":componentes,
+    }
+    
     form = {"formulario":formulario}
 
     for elementos in root:
@@ -103,9 +111,12 @@ def obter_objeto_formulario():
 
             if component != None:
                 ##adiciona o componente no formulario
-                formulario.append(component)
+                componentes.append(component)
 
-    formulario.append({"tipo":"evento", "nome":""})
+    formulario["evento_atual"] = ""
+
+    print(form)
+
     return form
 
 print(obter_objeto_formulario())
