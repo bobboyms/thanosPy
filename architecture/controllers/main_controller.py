@@ -7,21 +7,80 @@ from architecture.construtor_de_formulario import obter_objeto_formulario
 from architecture.utils.util import find_widget
 from architecture.controllers.session_controller import Session
 
+"""
+Obtem o valor do atributo da classe no formato convertido
+"""
+def get_value_casting(comp, attr):
 
-def get_dict_form(dataForm):
+    if comp["type"] == "float":
+        
+        if type(attr) == str and len(attr) == 0:
+            return 0
+
+        if type(attr) == float and attr == 0:
+            return 0
+
+        if type(attr) == int and attr == 0:
+            return 0
+
+        return float(attr)
+    else:
+        return attr
+
+"""
+Obtem valor de uma propriedade dentro da cacle
+"""
+def get_value_attr(attr, comp):
+
+    print("ATTR %s" % attr)
+
+    if "." in comp["property"]:
+            
+        props = comp["property"].split(".")
+            
+        for prop in props:
+            attr = getattr(attr, prop)
+        
+        return attr
+
+    else:
+
+        attr = getattr(attr, comp["property"])
+        return attr
+
+"""
+Seta valores recebidos da view e adicona na classe
+"""
+def set_value_attr(attr, comp, inicial = False):
     
-    dicionario = dict()
+    instance = None
+    count = 0
+    if "." in comp["property"]:
+        
+        props = comp["property"].split(".")
+        
+        for prop in props:
+            print("===================")
+            print(prop)
+            attr = getattr(attr, prop)
+            count += 1
+            if len(props) > count:
+               instance = attr
+        
+        nome_prop = props[len(props) -1]
+        instance.__dict__[nome_prop] = get_value_casting(comp, comp["valor"])
+            
+    else:
+        attr.__dict__[comp["property"]] = get_value_casting(comp, comp["valor"])
 
-    #pega os valores recebidos da view
+"""
+Pega os valores da classe Form e adiciona no dicionario para enviar para VIEW
+"""
+def update_view(form, dataForm):
+    #atualiza a view
     for comp in dataForm["formulario"]["componentes"]:
-        if comp["tipo"] == "text":
-            if comp["type"] == "float":
-                if comp["valor"] == "":
-                    dicionario[comp["property"]] = float(0.0)
-                else:
-                    dicionario[comp["property"]] = float(comp["valor"])
-
-    return dicionario
+       if comp["tipo"] == "text":
+            comp["valor"] = get_value_attr(form, comp)
 
 """
 """
@@ -34,24 +93,37 @@ def get_instance_form(dataForm):
 
     instance = session.get_form_instance_session(id_formulario)
 
+    #########################################
+    #
+    # se existir uma instancia
+    #
     if instance != None:
-        print("USOU UM FORM")
-        dicionario = get_dict_form(dataForm)
-        instance.__dict__.update(dicionario)
-
+        #dicionario = get_dict_form(dataForm)
+        #instance.__dict__.update(dicionario)
+        for comp in dataForm["formulario"]["componentes"]:
+            if comp["tipo"] != "button":
+                set_value_attr(instance,comp)
+        
         return instance
 
-    print("CRIOU UM FORM")
-    dicionario = get_dict_form(dataForm)
+    ########################################
+    #
+    # se nao existir uma instancia
 
     ## aqui cria o objeto
     ## OBS: criar o objeto se ele não existir na memoria
     Class_ = find_widget(nome_formulario)
-    form = Class_(**dicionario)
+    instance = Class_()
 
-    session.create_form_instance_session(id_formulario,form)
+    print(instance)
 
-    return form
+    # for comp in dataForm["formulario"]["componentes"]:
+    #         if comp["tipo"] != "button":
+    #             set_value_attr(instance,comp,inicial=True)
+
+    session.create_form_instance_session(id_formulario,instance)
+
+    return instance
 
 """
 """
@@ -59,11 +131,13 @@ def get_instance_form(dataForm):
 def obter_formulario():
 
     dataForm = obter_objeto_formulario()
-
-    print("###############")
-    print(dataForm)
-
     form = get_instance_form(dataForm)
+
+    if form == None:
+        raise Exception("Nenhum formulario encontrado")
+
+    #atualiza a view
+    update_view(form,dataForm)
 
     return json.dumps(dataForm)
 
@@ -73,7 +147,6 @@ def obter_formulario():
 def submebter_formulario():
 
     dataForm = request.get_json()
-    
     form = get_instance_form(dataForm)
 
     #executa o evento no servidor
@@ -82,9 +155,8 @@ def submebter_formulario():
     func()
 
     #atualiza a view
-    for comp in dataForm["formulario"]["componentes"]:
-       if comp["tipo"] == "text":
-            comp["valor"] = form.__dict__[comp["property"]]
+    update_view(form,dataForm)
+
 
     return json.dumps(dataForm)
 

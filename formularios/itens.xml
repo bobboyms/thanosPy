@@ -1,10 +1,12 @@
 <data>  
-    <formulario controller="Nome da classe controladora" form="TesteForm">
+    <formulario form="TesteForm">
         <inputText label="Digite o valor de A" property="valor_a" type="float" />
         <inputText label="Digite o valor de B" property="valor_b" type="float" />
         <inputText label="Resultado" property="resultado" type="float" />
-        <button label="SUBTRAIR VALOR" property="resultado" event="eventoSubtrai" />
-        <button label="SOMAR VALOR" property="resultado" event="eventoSoma" />
+        <button label="SUBTRAIR VALOR" event="eventoSubtrai" />
+        <button label="SOMAR VALOR" event="eventoSoma" />
+        <inputText label="Nome" property="cliente.nome" type="str" />
+        <inputText label="Rua" property="cliente.endereco.rua" type="str" />
     </formulario>
 </data>  
 
