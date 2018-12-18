@@ -10,15 +10,15 @@ db = SQLAlchemy(app)
 
 app.debug = True
 
-class Cliente(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(80), unique=True, nullable=False)
+# class Cliente(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     nome = db.Column(db.String(80), unique=True, nullable=False)
 
-    def __repr__(self):
-        return '<User %r>' % self.nome
+#     def __repr__(self):
+#         return '<User %r>' % self.nome
 
-cliente = Cliente()
-cliente.nome = "pedro jose"
+# cliente = Cliente()
+# cliente.nome = "pedro jose"
 
-db.session.add(cliente)
-db.session.commit()
+# db.session.add(cliente)
+# db.session.commit()
