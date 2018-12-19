@@ -7,6 +7,9 @@
         <button label="SOMAR VALOR" event="eventoSoma" />
         <inputText label="Nome" property="cliente.nome" type="str" />
         <inputText label="Rua" property="cliente.endereco.rua" type="str" />
+
+        <dataTable property="obter_dados" />
+
     </formulario>
 </data>  
 

@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123456789@localhost/teste"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123456789@localhost/thanos"
 db = SQLAlchemy(app)
 
 app.debug = True

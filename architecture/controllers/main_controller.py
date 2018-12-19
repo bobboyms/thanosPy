@@ -1,3 +1,4 @@
+import types
 from flask import json, jsonify, request
 #from functools import wraps
 from configuracao import app
@@ -6,6 +7,8 @@ from forms.TesteForm import TesteForm
 from architecture.construtor_de_formulario import obter_objeto_formulario
 from architecture.utils.util import find_widget
 from architecture.controllers.session_controller import Session
+
+from models.Car import Car
 
 """
 Obtem o valor do atributo da classe no formato convertido
@@ -79,8 +82,28 @@ Pega os valores da classe Form e adiciona no dicionario para enviar para VIEW
 def update_view(form, dataForm):
     #atualiza a view
     for comp in dataForm["formulario"]["componentes"]:
-       if comp["tipo"] == "text":
-            comp["valor"] = get_value_attr(form, comp)
+        if comp["tipo"] == "text":
+
+            attr = get_value_attr(form, comp)
+
+            if type(attr) == types.MethodType:
+                comp["valor"] = attr()
+            else:
+                comp["valor"] = attr
+
+            
+        elif comp["tipo"] == "dataTable":
+
+            attr = get_value_attr(form, comp)
+
+            if type(attr) == types.MethodType:
+                comp["items"] = attr()
+                comp["datasource"] = attr()
+                comp["totalRecords"] = len(attr())
+            else:
+                comp["items"] = attr
+                comp["datasource"] = attr
+                comp["totalRecords"] = len(attr)
 
 """
 """
@@ -101,7 +124,7 @@ def get_instance_form(dataForm):
         #dicionario = get_dict_form(dataForm)
         #instance.__dict__.update(dicionario)
         for comp in dataForm["formulario"]["componentes"]:
-            if comp["tipo"] != "button":
+            if comp["tipo"] != "button" and comp["tipo"] != "dataTable":
                 set_value_attr(instance,comp)
         
         return instance
@@ -160,3 +183,14 @@ def submebter_formulario():
 
     return json.dumps(dataForm)
 
+
+@app.route("/main/obter_carros", methods=["GET"])
+def obter_carros():
+    dados = Car.query.all()
+    arr = []
+    for car in dados:
+        arr.append(car.as_dict()) 
+    
+    #print(contactsArr)
+    #return '{"data":[{"vin":"a1653d4d","brand":"Volkswagen","year":1998,"color":"White"}]}'
+    return json.dumps({"data":arr})

@@ -108,6 +108,23 @@ def obter_objeto_formulario():
                                 "evento":obter_item_tratado(iten,"event"), 
                                 "label": obter_item_tratado(iten,"label")
                             }
+            elif iten.tag == "dataTable":
+                component = {
+                              "tipo":"dataTable", 
+                              "id":obter_id_unico(iten),
+                              "property":obter_item_tratado(iten,"property"),
+                              "items": [], 
+                              "datasource" : [],
+                              "loading": False,
+                              "first": 0,
+                              "rows": 10,
+                              "totalRecords": 0,
+                            }       
+          #componente.datasource = data;
+          #componente["totalRecords"] = data.length,
+          #componente["items"] = componente.datasource.slice(0, componente.rows),
+          #componente["loading"] = false
+
 
             if component != None:
                 ##adiciona o componente no formulario
