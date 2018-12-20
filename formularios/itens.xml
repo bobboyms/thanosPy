@@ -8,7 +8,8 @@
         <inputText label="Nome" property="cliente.nome" type="str" />
         <inputText label="Rua" property="cliente.endereco.rua" type="str" />
 
-        <dataTable property="obter_dados" />
+        <dataTable property="model_car" use_data_model="True" />
+
 
     </formulario>
 </data>  

@@ -31,7 +31,7 @@ def get_value_casting(comp, attr):
         return attr
 
 """
-Obtem valor de uma propriedade dentro da cacle
+Obtem valor de uma propriedade dentro da clace
 """
 def get_value_attr(attr, comp):
 
@@ -47,7 +47,6 @@ def get_value_attr(attr, comp):
         return attr
 
     else:
-
         attr = getattr(attr, comp["property"])
         return attr
 
@@ -96,14 +95,24 @@ def update_view(form, dataForm):
 
             attr = get_value_attr(form, comp)
 
-            if type(attr) == types.MethodType:
-                comp["items"] = attr()
-                comp["datasource"] = attr()
-                comp["totalRecords"] = len(attr())
+            if comp["use_data_model"] == True:
+                
+                toal_registros = attr.row_count()
+                itens = attr.load_data(first=comp["first"], pageSize=comp["rows"])
+
+                comp["items"] = itens
+                comp["totalRecords"] = toal_registros
+
             else:
-                comp["items"] = attr
-                comp["datasource"] = attr
-                comp["totalRecords"] = len(attr)
+                if type(attr) == types.MethodType:
+                    comp["items"] = attr()
+                    comp["datasource"] = attr()
+                    comp["totalRecords"] = len(attr())
+                else:
+                    comp["items"] = attr
+                    comp["datasource"] = attr
+                    comp["totalRecords"] = len(attr)
+                
 
 """
 """
@@ -161,6 +170,8 @@ def obter_formulario():
 
     #atualiza a view
     update_view(form,dataForm)
+
+    print(dataForm)
 
     return json.dumps(dataForm)
 

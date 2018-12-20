@@ -114,11 +114,11 @@ def obter_objeto_formulario():
                               "id":obter_id_unico(iten),
                               "property":obter_item_tratado(iten,"property"),
                               "items": [], 
-                              "datasource" : [],
                               "loading": False,
                               "first": 0,
                               "rows": 10,
                               "totalRecords": 0,
+                              "use_data_model":True
                             }       
           #componente.datasource = data;
           #componente["totalRecords"] = data.length,
